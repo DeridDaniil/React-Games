@@ -7,10 +7,10 @@ interface IFigureProps {
   figureName: string;
 }
 
-const Figure: FC<IFigureProps> = ({ axisX, axisY, figureName }) => {
+const Figure: FC<IFigureProps> = ({ axisY, axisX, figureName }) => {
   const onDragStart = (event: DragEvent<HTMLDivElement>) => {
     event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('text/plain', `${figureName}, ${axisX}, ${axisY}`);
+    event.dataTransfer.setData('text/plain', `${figureName}, ${axisY}, ${axisX}`);
     setTimeout(() => {
       event.currentTarget.style.display = 'none';
     }, 0)
@@ -20,7 +20,7 @@ const Figure: FC<IFigureProps> = ({ axisX, axisY, figureName }) => {
 
   return (
     <div
-      className={`figure ${figureName} p-${axisX}${axisY}`}
+      className={`figure ${figureName} p-${axisY}${axisX}`}
       draggable='true'
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}

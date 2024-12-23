@@ -10,11 +10,10 @@ const Figures = () => {
   const onDrop = (event: DragEvent<HTMLDivElement>) => {
     const newPosition = position.map(element => element);
     const { x, y } = calculateCoords(event, figuresRef);
-    const [figureName, axisX, axisY] = event.dataTransfer.getData('text').split(', ');
-    console.log(x, y, axisX, axisY);
+    const [figureName, axisY, axisX] = event.dataTransfer.getData('text').split(', ');
 
-    newPosition[Number(axisX)][Number(axisY)] = '';
-    newPosition[x][y] = figureName;
+    newPosition[Number(axisY)][Number(axisX)] = '';
+    newPosition[y][x] = figureName;
 
     setPosition(newPosition);
   }
@@ -23,14 +22,14 @@ const Figures = () => {
 
   return (
     <div className={styles.figures} onDrop={onDrop} onDragOver={onDragOver} ref={figuresRef}>
-      {position.map((row, x) =>
-        row.map((_y, y: number) => (
-          position[x][y] ?
+      {position.map((row, y) =>
+        row.map((_y, x: number) => (
+          position[y][x] ?
             <Figure
               key={x + '-' + y}
-              axisX={x}
               axisY={y}
-              figureName={position[x][y]}
+              axisX={x}
+              figureName={position[y][x]}
             />
             : null
         ))

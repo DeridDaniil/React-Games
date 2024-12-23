@@ -5,15 +5,14 @@ import Figures from '../Figures/Figures';
 import styles from './Board.module.scss';
 
 const Board = () => {
-  const axisX = Array(8).fill('').map((_x, i) => 8 - i);
-  const axisY = Array(8).fill('').map((_y, i) => i + 1);
-
+  const axisX = Array(8).fill('').map((_y, i) => i + 1);
+  const axisY = Array(8).fill('').map((_x, i) => 8 - i);
   return (
     <div className={styles.board}>
-      <Ranks ranks={axisX} />
+      <Ranks ranks={axisY} />
       <div className={styles.cells}>
-        {axisX.map((x, i) => (
-          axisY.map((y, j) => (
+        {axisY.map((y, i) => (
+          axisX.map((x, j) => (
             <div
               key={x + '-' + y}
               className={`${styles.cell} ${(i + j) % 2 === 0 ? styles.white : styles.black}`}>
@@ -22,7 +21,7 @@ const Board = () => {
         ))}
         <Figures/>
       </div>
-      <Files files={axisY} />
+      <Files files={axisX} />
     </div>
   )
 }
