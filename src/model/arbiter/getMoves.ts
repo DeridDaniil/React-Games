@@ -107,3 +107,25 @@ export const getKingMoves = ({ figureName, axisY, axisX, currentPosition }: TMov
   });
   return moves;
 }
+
+export const getPawnMoves = ({ figureName, axisY, axisX, currentPosition }: TMoves) => {
+  const moves: number[][] = [];
+  const isWhite = figureName?.slice(0, 5) === 'white';
+  const dir = isWhite ? 1 : -1;
+  const enemy = isWhite ? 'black' : 'white';
+  if (!currentPosition?.[axisY + dir]?.[axisX]) {
+    moves.push([axisY + dir, axisX]);
+  };
+  if (axisY % 5 === 1) {
+    if (!currentPosition?.[axisY + dir]?.[axisX] && !currentPosition?.[axisY + (dir * 2)]?.[axisX]) {
+      moves.push([axisY + (dir * 2), axisX]);
+    };
+  };
+  if (currentPosition?.[axisY + dir]?.[axisX - 1] && currentPosition?.[axisY + dir]?.[axisX - 1].slice(0, 5) === enemy) {
+    moves.push([axisY + dir, axisX - 1]);
+  };
+  if (currentPosition?.[axisY + dir]?.[axisX + 1] && currentPosition?.[axisY + dir]?.[axisX + 1].slice(0, 5) === enemy) {
+    moves.push([axisY + dir, axisX + 1]);
+  };
+  return moves;
+};

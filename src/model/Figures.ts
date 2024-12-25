@@ -3,10 +3,10 @@ import { DragEvent, MutableRefObject } from "react";
 export const createPositionFigures = () => {
   const position: string[][] = new Array(8).fill('').map((_x: string[]) => new Array(8).fill(''));
 
-  // for (let i = 0; i < 8; i++) {
-  //   position[6][i] = 'black-pawn';
-  //   position[1][i] = 'white-pawn';
-  // }
+  for (let i = 0; i < 8; i++) {
+    position[6][i] = 'black-pawn';
+    position[1][i] = 'white-pawn';
+  }
 
   position[0][0] = 'white-rook';
   position[0][1] = 'white-knight';
