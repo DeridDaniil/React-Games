@@ -19,8 +19,7 @@ const Figure: FC<IFigureProps> = ({ axisY, axisX, figureName }) => {
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('text/plain', `${figureName}, ${axisY}, ${axisX}`);
     setTimeout(() => {
-      const target = event.target as HTMLDivElement; // для ts
-      target.style.display = 'none';
+      (event.target as HTMLDivElement).style.display = 'none';
     }, 0);
     if (turn === figureName.slice(0, 5)) {
       const candidateMoves = arbiter.getRegularMoves({ figureName, axisY, axisX, currentPosition });
@@ -28,10 +27,7 @@ const Figure: FC<IFigureProps> = ({ axisY, axisX, figureName }) => {
     };
   }
 
-  const onDragEnd = (event: DragEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLDivElement; // для ts
-    target.style.display = 'block';
-  };
+  const onDragEnd = (event: DragEvent<HTMLDivElement>) => (event.target as HTMLDivElement).style.display = 'block';
 
   return (
     <div
