@@ -13,11 +13,16 @@ const Figures = () => {
   const currentPosition = chessState.position[chessState.position.length - 1];
 
   const onDrop = (event: DragEvent<HTMLDivElement>) => {
-    const newPosition = currentPosition.map((element: string[]) => element);
+    event.preventDefault();
+
+    const newPosition = currentPosition.map((y: string[]) => y.map(x => x));
     const { x, y } = calculateCoords(event, figuresRef);
     const [figureName, axisY, axisX] = event.dataTransfer.getData('text').split(', ');
 
-    if (chessState.candidateMoves?.find(m => m[0] === y && m[1] === x)) {
+    if (chessState.candidateMoves?.find((m: number[]) => m[0] === y && m[1] === x)) {
+      // Взятие пешкой на проходе.
+      if (figureName.slice(6) === 'pawn' && !newPosition[y][x] && y !== axisY && x !== axisX) newPosition[axisY][x] = '';
+
       newPosition[Number(axisY)][Number(axisX)] = '';
       newPosition[y][x] = figureName;
 

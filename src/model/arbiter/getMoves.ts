@@ -3,6 +3,7 @@ export type TMoves = {
   axisY: number;
   axisX: number;
   currentPosition: string[][];
+  prevPosition?: string;
 }
 
 export const getRookMoves = ({ figureName, axisY, axisX, currentPosition }: TMoves) => {
@@ -108,24 +109,51 @@ export const getKingMoves = ({ figureName, axisY, axisX, currentPosition }: TMov
   return moves;
 }
 
-export const getPawnMoves = ({ figureName, axisY, axisX, currentPosition }: TMoves) => {
+export const getPawnMoves = ({ figureName, prevPosition, axisY, axisX, currentPosition }: TMoves) => {
   const moves: number[][] = [];
   const isWhite = figureName?.slice(0, 5) === 'white';
   const dir = isWhite ? 1 : -1;
   const enemy = isWhite ? 'black' : 'white';
+  const enemyPawn = isWhite ? 'black-pawn' : 'white-pawn';
+  const axesX = [axisX - 1, axisX + 1];
+
+  // Ход пешки на 1 клетку вперед.
   if (!currentPosition?.[axisY + dir]?.[axisX]) {
     moves.push([axisY + dir, axisX]);
   };
+
+  // Первый ход пешки на 2 клетки вперед.
   if (axisY % 5 === 1) {
     if (!currentPosition?.[axisY + dir]?.[axisX] && !currentPosition?.[axisY + (dir * 2)]?.[axisX]) {
       moves.push([axisY + (dir * 2), axisX]);
     };
   };
+
+  // Атака пешки слева.
   if (currentPosition?.[axisY + dir]?.[axisX - 1] && currentPosition?.[axisY + dir]?.[axisX - 1].slice(0, 5) === enemy) {
     moves.push([axisY + dir, axisX - 1]);
   };
+
+  // Атака пешки справа.
   if (currentPosition?.[axisY + dir]?.[axisX + 1] && currentPosition?.[axisY + dir]?.[axisX + 1].slice(0, 5) === enemy) {
     moves.push([axisY + dir, axisX + 1]);
   };
+
+  // Взятие на проходе.
+  if (prevPosition) {
+    if ((isWhite && axisY === 4) || (!isWhite && axisY === 3)) {
+      axesX.forEach(x => {
+        if (
+          currentPosition?.[axisY]?.[x] === enemyPawn &&
+          currentPosition?.[axisY + (dir * 2)]?.[x] === '' &&
+          prevPosition?.[axisY]?.[x] === '' &&
+          prevPosition?.[axisY + (dir * 2)]?.[x] === enemyPawn
+        ) {
+          moves.push([axisY + dir, x]);
+        }
+      })
+    }
+  }
+
   return moves;
 };

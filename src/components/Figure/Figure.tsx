@@ -13,7 +13,6 @@ interface IFigureProps {
 const Figure: FC<IFigureProps> = ({ axisY, axisX, figureName }) => {
   const { chessState, dispatch } = useChessContext();
   const { turn, position } = chessState;
-  const currentPosition = position[position.length - 1];
 
   const onDragStart = (event: DragEvent<HTMLDivElement>) => {
     event.dataTransfer.effectAllowed = 'move';
@@ -22,7 +21,13 @@ const Figure: FC<IFigureProps> = ({ axisY, axisX, figureName }) => {
       (event.target as HTMLDivElement).style.display = 'none';
     }, 0);
     if (turn === figureName.slice(0, 5)) {
-      const candidateMoves = arbiter.getRegularMoves({ figureName, axisY, axisX, currentPosition });
+      const candidateMoves = arbiter.getRegularMoves({
+        figureName,
+        axisY,
+        axisX,
+        currentPosition: position[position.length - 1],
+        prevPosition: position[position.length - 2]
+      });
       dispatch(generateCandidateMoves({ candidateMoves }));
     };
   }
