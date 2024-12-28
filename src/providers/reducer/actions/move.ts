@@ -1,4 +1,4 @@
-import { actionTypes } from "../../../model/actionsTypes"
+import { ActionTypes } from "../../../model/enums"
 
 type TMakeNewMove = {
   newPosition: string[][];
@@ -6,7 +6,7 @@ type TMakeNewMove = {
 
 export const makeNewMove = ({ newPosition }: TMakeNewMove) => {
   return {
-    type: actionTypes.NEW_MOVE,
+    type: ActionTypes.NEW_MOVE,
     payload: { newPosition }
   }
 }
@@ -17,13 +17,13 @@ type TGenerateCandidateMoves = {
 
 export const generateCandidateMoves = ({ candidateMoves }: TGenerateCandidateMoves) => {
   return {
-    type: actionTypes.GENERATE_CANDIDATE_MOVES,
+    type: ActionTypes.GENERATE_CANDIDATE_MOVES,
     payload: { candidateMoves }
   }
 }
 
 export const clearCandidates = () => {
   return {
-    type: actionTypes.CLEAR_CANDIDATE_MOVES
+    type: ActionTypes.CLEAR_CANDIDATE_MOVES
   }
 }

@@ -1,9 +1,8 @@
-import { actionTypes } from "../../model/actionsTypes";
-import { Status } from "../../model/constant";
+import { ActionTypes, StatusTypes } from "../../model/enums";
 
 export const ChessReducer = (state, action) => {
   switch (action.type) {
-    case actionTypes.NEW_MOVE: {
+    case ActionTypes.NEW_MOVE: {
       let { turn, position } = state;
       turn = turn === 'white' ? 'black' : 'white';
       position = [
@@ -16,31 +15,31 @@ export const ChessReducer = (state, action) => {
         position
       }
     }
-    case actionTypes.GENERATE_CANDIDATE_MOVES: {
+    case ActionTypes.GENERATE_CANDIDATE_MOVES: {
       return {
         ...state,
         candidateMoves: action.payload.candidateMoves
       }
     }
-    case actionTypes.CLEAR_CANDIDATE_MOVES: {
+    case ActionTypes.CLEAR_CANDIDATE_MOVES: {
       return {
         ...state,
         candidateMoves: []
       }
     }
 
-    case actionTypes.PROMOTION_OPEN: {
+    case ActionTypes.PROMOTION_OPEN: {
       return {
         ...state,
-        status: Status.PROMOTING,
+        status: StatusTypes.PROMOTING,
         promotionSquare: { ...action.payload }
       }
     }
 
-    case actionTypes.PROMOTION_CLOSE: {
+    case ActionTypes.PROMOTION_CLOSE: {
       return {
         ...state,
-        status: Status.ONGOING,
+        status: StatusTypes.ONGOING,
         promotionSquare: null
       }
 

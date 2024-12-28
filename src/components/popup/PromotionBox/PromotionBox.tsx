@@ -23,7 +23,7 @@ const PromotionBox = ({ onClosePopup }: TPromotionBox) => {
 
     if (promotionSquare.x <= 1) style.left = '0%';
     else if (promotionSquare.x >= 6) style.right = '0%';
-    else style.left = `${12.5 * promotionSquare.x - 20}%`
+    else style.left = `${13 * promotionSquare.x - 20}%`
 
     return style;
   }
