@@ -1,5 +1,5 @@
 import { FC, DragEvent } from 'react';
-import './Figure.scss';
+// import './Figure.scss';
 import { useChessContext } from '../../providers/context/ChessContext';
 import arbiter from '../../model/arbiter/arbiter';
 import { generateCandidateMoves } from '../../providers/reducer/actions/move';

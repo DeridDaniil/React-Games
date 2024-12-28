@@ -1,4 +1,5 @@
 import { getRookMoves, getKnightMoves, TMoves, getBishopMoves, getQueenMoves, getKingMoves, getPawnMoves } from "./getMoves"
+import { movePawn, moveFigure, TPerformMove } from "./move";
 
 const arbiter = {
   getRegularMoves: function ({ figureName, axisY, axisX, currentPosition, prevPosition }: TMoves) {
@@ -9,6 +10,10 @@ const arbiter = {
     if (figure === 'bishop') return getBishopMoves({ figureName, axisY, axisX, currentPosition });
     if (figure === 'knight') return getKnightMoves({ axisY, axisX, currentPosition });
     if (figure === 'rook') return getRookMoves({ figureName, axisY, axisX, currentPosition });
+  },
+  performMove: function ({ currentPosition, figureName, axisY, axisX, y, x }: TPerformMove) {
+    if (figureName.slice(6) === 'pawn') return movePawn({ currentPosition, figureName, axisY, axisX, y, x });
+    else return moveFigure({ currentPosition, figureName, axisY, axisX, y, x });
   }
 }
 

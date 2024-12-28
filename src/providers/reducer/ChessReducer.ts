@@ -1,4 +1,5 @@
 import { actionTypes } from "../../model/actionsTypes";
+import { Status } from "../../model/constant";
 
 export const ChessReducer = (state, action) => {
   switch (action.type) {
@@ -26,6 +27,23 @@ export const ChessReducer = (state, action) => {
         ...state,
         candidateMoves: []
       }
+    }
+
+    case actionTypes.PROMOTION_OPEN: {
+      return {
+        ...state,
+        status: Status.PROMOTING,
+        promotionSquare: { ...action.payload }
+      }
+    }
+
+    case actionTypes.PROMOTION_CLOSE: {
+      return {
+        ...state,
+        status: Status.ONGOING,
+        promotionSquare: null
+      }
+
     }
     default:
       return state;

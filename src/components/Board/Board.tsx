@@ -4,6 +4,7 @@ import Figures from '../Figures/Figures';
 
 import { useChessContext } from '../../providers/context/ChessContext';
 import styles from './Board.module.scss';
+import Popup from '../popup/Popup';
 
 const Board = () => {
   const axisX = Array(8).fill('').map((_y, i) => i + 1);
@@ -30,11 +31,12 @@ const Board = () => {
           axisX.map((x, j) => (
             <div
               key={x + '-' + y}
-              className={getClassName(7-i, j)}>
+              className={getClassName(7 - i, j)}>
             </div>
           ))
         ))}
         <Figures />
+        <Popup />
       </div>
       <Files files={axisX} />
     </div>
