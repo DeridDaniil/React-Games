@@ -42,7 +42,15 @@ export const ChessReducer = (state, action) => {
         status: StatusTypes.ONGOING,
         promotionSquare: null
       }
+    }
 
+    case ActionTypes.CAN_CASTLE: {
+      const { turn, castleDirection } = state;
+      castleDirection[turn] = action.payload;
+      return {
+        ...state,
+        castleDirection
+      }
     }
     default:
       return state;

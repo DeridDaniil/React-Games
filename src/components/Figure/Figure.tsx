@@ -12,7 +12,7 @@ interface IFigureProps {
 
 const Figure: FC<IFigureProps> = ({ axisY, axisX, figureName }) => {
   const { chessState, dispatch } = useChessContext();
-  const { turn, position } = chessState;
+  const { turn, position, castleDirection } = chessState;
 
   const onDragStart = (event: DragEvent<HTMLDivElement>) => {
     event.dataTransfer.effectAllowed = 'move';
@@ -26,7 +26,8 @@ const Figure: FC<IFigureProps> = ({ axisY, axisX, figureName }) => {
         axisY,
         axisX,
         currentPosition: position[position.length - 1],
-        prevPosition: position[position.length - 2]
+        prevPosition: position[position.length - 2],
+        castleDirection: castleDirection[turn]
       });
       dispatch(generateCandidateMoves({ candidateMoves }));
     };

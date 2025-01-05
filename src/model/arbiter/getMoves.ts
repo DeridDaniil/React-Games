@@ -4,6 +4,7 @@ export type TMoves = {
   axisX: number;
   currentPosition: string[][];
   prevPosition?: string;
+  castleDirection?: string;
 }
 
 export const getRookMoves = ({ figureName, axisY, axisX, currentPosition }: TMoves) => {
@@ -89,9 +90,10 @@ export const getQueenMoves = ({ figureName, axisY, axisX, currentPosition }: TMo
   return moves;
 }
 
-export const getKingMoves = ({ figureName, axisY, axisX, currentPosition }: TMoves) => {
+export const getKingMoves = ({ figureName, axisY, axisX, currentPosition, castleDirection }: TMoves) => {
   const moves: number[][] = [];
   const us = figureName?.slice(0, 5);
+  const y = us === 'white' ? 0 : 7;
 
   const direction = [
     [1, -1], [1, 0], [1, 1],
@@ -106,6 +108,26 @@ export const getKingMoves = ({ figureName, axisY, axisX, currentPosition }: TMov
       moves.push([y, x]);
     };
   });
+
+  if (axisX !== 4 || axisY % 7 !== 0 || !castleDirection || castleDirection === 'none') {
+    return moves;
+  }
+
+  if (['left', 'both'].includes(castleDirection) &&
+    !currentPosition[y][3] &&
+    !currentPosition[y][2] &&
+    !currentPosition[y][1] &&
+    currentPosition[y][0] === `${us}-rook`
+  ) {
+    moves.push([y, 2]);
+  };
+  if (['right', 'both'].includes(castleDirection) &&
+    !currentPosition[y][5] &&
+    !currentPosition[y][6] &&
+    currentPosition[y][7] === `${us}-rook`
+  ) {
+    moves.push([y, 6]);
+  };
   return moves;
 }
 
@@ -157,3 +179,35 @@ export const getPawnMoves = ({ figureName, prevPosition, axisY, axisX, currentPo
 
   return moves;
 };
+
+export type TGetCastlingDirections = {
+  figureName: string;
+  axisY: number;
+  axisX: number;
+  castleDirection: {
+    white: string;
+    black: string;
+  } | string;
+}
+
+export const getCastlingDirections = ({ figureName, axisY, axisX, castleDirection }: TGetCastlingDirections) => {
+  if (!figureName || !castleDirection) return;
+  const figure = figureName.slice(0, 5);
+  const direction = castleDirection[figure];
+  const isWhite = figure === 'white' ? 0 : 7;
+
+  if (figureName?.slice(6) === 'king') {
+    return 'none';
+  }
+
+  if (axisX === isWhite && axisY === 0) {
+    if (direction === 'both') return 'right';
+    if (direction === 'left') return 'none';
+  }
+
+  if (axisX === isWhite && axisY === 7) {
+    if (direction === 'both') return 'right';
+    if (direction === 'left') return 'none';
+  }
+
+}

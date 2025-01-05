@@ -6,5 +6,9 @@ export const initChessGame = {
   turn: 'white',
   candidateMoves: [],
   status: StatusTypes.ONGOING,
-  promotionSquare: null
+  promotionSquare: null,
+  castleDirection: {
+    white: 'both',
+    black: 'both'
+  }
 }
