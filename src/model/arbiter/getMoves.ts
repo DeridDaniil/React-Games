@@ -27,7 +27,7 @@ interface ICastlingMoves extends IFigureMoves {
   castleDirection: string;
 }
 
-interface IPawnMoves extends IFigureMoves {
+interface IGetEnPassantMoves extends IFigureMoves {
   prevPosition: string;
 }
 
@@ -145,13 +145,11 @@ export const getKingMoves = ({ figureName, axisY, axisX, currentPosition }: IFig
   return moves;
 }
 
-export const getPawnMoves = ({ figureName, prevPosition, axisY, axisX, currentPosition }: IPawnMoves) => {
+export const getPawnMoves = ({ figureName, axisY, axisX, currentPosition }: IFigureMoves) => {
   const moves: number[][] = [];
-  const isWhite = figureName?.slice(0, 5) === 'white';
+  const isWhite = figureName.slice(0, 5) === 'white';
   const dir = isWhite ? 1 : -1;
   const enemy = isWhite ? 'black' : 'white';
-  const enemyPawn = isWhite ? 'black-pawn' : 'white-pawn';
-  const axesX = [axisX - 1, axisX + 1];
 
   // Ход пешки на 1 клетку вперед.
   if (!currentPosition?.[axisY + dir]?.[axisX]) {
@@ -175,7 +173,16 @@ export const getPawnMoves = ({ figureName, prevPosition, axisY, axisX, currentPo
     moves.push([axisY + dir, axisX + 1]);
   };
 
-  // Взятие на проходе.
+  return moves;
+};
+
+export const getEnPassantMoves = ({ figureName, prevPosition, axisY, axisX, currentPosition }: IGetEnPassantMoves) => {
+  const moves: number[][] = [];
+  const isWhite = figureName.slice(0, 5) === 'white';
+  const dir = isWhite ? 1 : -1;
+  const enemyPawn = isWhite ? 'black-pawn' : 'white-pawn';
+  const axesX = [axisX - 1, axisX + 1];
+
   if (prevPosition) {
     if ((isWhite && axisY === 4) || (!isWhite && axisY === 3)) {
       axesX.forEach(x => {
@@ -190,9 +197,8 @@ export const getPawnMoves = ({ figureName, prevPosition, axisY, axisX, currentPo
       })
     }
   }
-
   return moves;
-};
+}
 
 export const getCastlingMoves = ({ figureName, axisY, axisX, currentPosition, castleDirection }: ICastlingMoves) => {
   const moves: number[][] = [];

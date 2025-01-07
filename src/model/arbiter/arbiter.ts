@@ -1,4 +1,4 @@
-import { getRookMoves, getKnightMoves, IRegularMoves, getBishopMoves, getQueenMoves, getKingMoves, getPawnMoves, IValidMoves, getKingPosition, getFigures, getCastlingMoves } from "./getMoves"
+import { getRookMoves, getKnightMoves, IRegularMoves, getBishopMoves, getQueenMoves, getKingMoves, getPawnMoves, IValidMoves, getKingPosition, getFigures, getCastlingMoves, getEnPassantMoves } from "./getMoves"
 import { movePawn, moveFigure, TPerformMove } from "./move";
 
 const arbiter = {
@@ -9,6 +9,7 @@ const arbiter = {
     if (figure === 'knight') return getKnightMoves({ figureName, axisY, axisX, currentPosition });
     if (figure === 'rook') return getRookMoves({ figureName, axisY, axisX, currentPosition });
     if (figure === 'king') return getKingMoves({ figureName, axisY, axisX, currentPosition });
+    if (figure === 'pawn') return getPawnMoves({ figureName, axisY, axisX, currentPosition });
   },
 
   getValidMoves: function ({ figureName, axisY, axisX, currentPosition, prevPosition, castleDirection }: IValidMoves) {
@@ -17,7 +18,10 @@ const arbiter = {
     const notInCheckMoves: number[][] = [];
 
     if (figureName.slice(6) === 'pawn') {
-      moves = getPawnMoves({ figureName, axisY, axisX, currentPosition, prevPosition });
+      moves = [
+        ...moves,
+        ...getEnPassantMoves({ figureName, prevPosition, axisY, axisX, currentPosition })
+      ];
     }
 
     if (figureName.slice(6) === 'king') {
