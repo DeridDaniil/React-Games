@@ -1,16 +1,50 @@
-export type TMoves = {
-  figureName?: string;
+import arbiter from "./arbiter";
+
+export interface IValidMoves {
+  figureName: string;
   axisY: number;
   axisX: number;
   currentPosition: string[][];
-  prevPosition?: string;
-  castleDirection?: string;
+  prevPosition: string;
+  castleDirection: string;
 }
 
-export const getRookMoves = ({ figureName, axisY, axisX, currentPosition }: TMoves) => {
+export interface IRegularMoves {
+  figureName: string;
+  axisY: number;
+  axisX: number;
+  currentPosition: string[][];
+}
+
+export interface IFigureMoves {
+  figureName: string;
+  axisY: number;
+  axisX: number;
+  currentPosition: string[][];
+}
+
+interface ICastlingMoves extends IFigureMoves {
+  castleDirection: string;
+}
+
+interface IPawnMoves extends IFigureMoves {
+  prevPosition: string;
+}
+
+export type TGetCastlingDirections = {
+  figureName: string;
+  axisY: number;
+  axisX: number;
+  castleDirection: {
+    white: string;
+    black: string;
+  } | string;
+}
+
+export const getRookMoves = ({ figureName, axisY, axisX, currentPosition }: IFigureMoves) => {
   const moves: number[][] = [];
-  const us = figureName?.slice(0, 5);
-  const enemy = us === 'white' ? 'black' : 'white';
+  const playerColor = figureName?.slice(0, 5);
+  const enemy = playerColor === 'white' ? 'black' : 'white';
   const direction = [
     [-1, 0],
     [1, 0],
@@ -22,7 +56,7 @@ export const getRookMoves = ({ figureName, axisY, axisX, currentPosition }: TMov
       const y = axisY + (i * dir[0]);
       const x = axisX + (i * dir[1]);
       if (currentPosition?.[y]?.[x] === undefined) break;
-      if (currentPosition[y][x].slice(0, 5) === us) break;
+      if (currentPosition[y][x].slice(0, 5) === playerColor) break;
       if (currentPosition[y][x].slice(0, 5) === enemy) {
         moves.push([y, x]);
         break;
@@ -33,9 +67,9 @@ export const getRookMoves = ({ figureName, axisY, axisX, currentPosition }: TMov
   return moves;
 }
 
-export const getKnightMoves = ({ axisY, axisX, currentPosition }: TMoves) => {
+export const getKnightMoves = ({ figureName, axisY, axisX, currentPosition }: IFigureMoves) => {
   const moves: number[][] = [];
-  const enemy = currentPosition[axisY][axisX].slice(0, 5) === 'white' ? 'black' : 'white';
+  const enemy = figureName.slice(0, 5) === 'white' ? 'black' : 'white';
 
   const candidates = [
     [-2, 1],
@@ -56,10 +90,10 @@ export const getKnightMoves = ({ axisY, axisX, currentPosition }: TMoves) => {
   return moves;
 }
 
-export const getBishopMoves = ({ figureName, axisY, axisX, currentPosition }: TMoves) => {
+export const getBishopMoves = ({ figureName, axisY, axisX, currentPosition }: IFigureMoves) => {
   const moves: number[][] = [];
-  const us = figureName?.slice(0, 5);
-  const enemy = us === 'white' ? 'black' : 'white';
+  const playerColor = figureName?.slice(0, 5);
+  const enemy = playerColor === 'white' ? 'black' : 'white';
   const direction = [
     [-1, -1],
     [-1, 1],
@@ -71,7 +105,7 @@ export const getBishopMoves = ({ figureName, axisY, axisX, currentPosition }: TM
       const y = axisY + (i * dir[0]);
       const x = axisX + (i * dir[1]);
       if (currentPosition?.[y]?.[x] === undefined) break;
-      if (currentPosition[y][x].slice(0, 5) === us) break;
+      if (currentPosition[y][x].slice(0, 5) === playerColor) break;
       if (currentPosition[y][x].slice(0, 5) === enemy) {
         moves.push([y, x]);
         break;
@@ -82,7 +116,7 @@ export const getBishopMoves = ({ figureName, axisY, axisX, currentPosition }: TM
   return moves;
 }
 
-export const getQueenMoves = ({ figureName, axisY, axisX, currentPosition }: TMoves) => {
+export const getQueenMoves = ({ figureName, axisY, axisX, currentPosition }: IFigureMoves) => {
   const moves = [
     ...getRookMoves({ figureName, axisY, axisX, currentPosition }),
     ...getBishopMoves({ figureName, axisY, axisX, currentPosition })
@@ -90,10 +124,9 @@ export const getQueenMoves = ({ figureName, axisY, axisX, currentPosition }: TMo
   return moves;
 }
 
-export const getKingMoves = ({ figureName, axisY, axisX, currentPosition, castleDirection }: TMoves) => {
+export const getKingMoves = ({ figureName, axisY, axisX, currentPosition }: IFigureMoves) => {
   const moves: number[][] = [];
-  const us = figureName?.slice(0, 5);
-  const y = us === 'white' ? 0 : 7;
+  const playerColor = figureName?.slice(0, 5);
 
   const direction = [
     [1, -1], [1, 0], [1, 1],
@@ -104,34 +137,15 @@ export const getKingMoves = ({ figureName, axisY, axisX, currentPosition, castle
   direction.forEach(dir => {
     const y = axisY + dir[0];
     const x = axisX + dir[1];
-    if (currentPosition?.[y]?.[x] !== undefined && currentPosition[y][x].slice(0, 5) !== us) {
+    if (currentPosition?.[y]?.[x] !== undefined && currentPosition[y][x].slice(0, 5) !== playerColor) {
       moves.push([y, x]);
     };
   });
 
-  if (axisX !== 4 || axisY % 7 !== 0 || !castleDirection || castleDirection === 'none') {
-    return moves;
-  }
-
-  if (['left', 'both'].includes(castleDirection) &&
-    !currentPosition[y][3] &&
-    !currentPosition[y][2] &&
-    !currentPosition[y][1] &&
-    currentPosition[y][0] === `${us}-rook`
-  ) {
-    moves.push([y, 2]);
-  };
-  if (['right', 'both'].includes(castleDirection) &&
-    !currentPosition[y][5] &&
-    !currentPosition[y][6] &&
-    currentPosition[y][7] === `${us}-rook`
-  ) {
-    moves.push([y, 6]);
-  };
   return moves;
 }
 
-export const getPawnMoves = ({ figureName, prevPosition, axisY, axisX, currentPosition }: TMoves) => {
+export const getPawnMoves = ({ figureName, prevPosition, axisY, axisX, currentPosition }: IPawnMoves) => {
   const moves: number[][] = [];
   const isWhite = figureName?.slice(0, 5) === 'white';
   const dir = isWhite ? 1 : -1;
@@ -180,14 +194,38 @@ export const getPawnMoves = ({ figureName, prevPosition, axisY, axisX, currentPo
   return moves;
 };
 
-export type TGetCastlingDirections = {
-  figureName: string;
-  axisY: number;
-  axisX: number;
-  castleDirection: {
-    white: string;
-    black: string;
-  } | string;
+export const getCastlingMoves = ({ figureName, axisY, axisX, currentPosition, castleDirection }: ICastlingMoves) => {
+  const moves: number[][] = [];
+  const playerColor = figureName.slice(0, 5);
+  const y = playerColor === 'white' ? 0 : 7;
+
+  if (axisX !== 4 || axisY % 7 !== 0 || castleDirection === 'none') return moves;
+  if (arbiter.isPlayerInCheck({ positionAfterMove: currentPosition, player: playerColor })) return moves;
+
+  if (['left', 'both'].includes(castleDirection) &&
+    !currentPosition[y][3] &&
+    !currentPosition[y][2] &&
+    !currentPosition[y][1] &&
+    currentPosition[y][0] === `${playerColor}-rook` &&
+    !arbiter.isPlayerInCheck({
+      positionAfterMove: arbiter.performMove({ currentPosition, figureName, axisY, axisX, y, x: 3 }),
+      player: playerColor
+    })
+  ) {
+    moves.push([y, 2]);
+  };
+  if (['right', 'both'].includes(castleDirection) &&
+    !currentPosition[y][5] &&
+    !currentPosition[y][6] &&
+    currentPosition[y][7] === `${playerColor}-rook` &&
+    !arbiter.isPlayerInCheck({
+      positionAfterMove: arbiter.performMove({ currentPosition, figureName, axisY, axisX, y, x: 5 }),
+      player: playerColor
+    })
+  ) {
+    moves.push([y, 6]);
+  };
+  return moves;
 }
 
 export const getCastlingDirections = ({ figureName, axisY, axisX, castleDirection }: TGetCastlingDirections) => {
@@ -210,4 +248,38 @@ export const getCastlingDirections = ({ figureName, axisY, axisX, castleDirectio
     if (direction === 'left') return 'none';
   }
 
+}
+
+export const getKingPosition = (position: string[][], player: string) => {
+  let kingPosition;
+  position.forEach((axisY, y) => {
+    axisY.forEach((_axisX, x) => {
+      if (position[y][x].slice(0, 5) === player && position[y][x].slice(6) === 'king') {
+        kingPosition = [y, x];
+      }
+    })
+  })
+  return kingPosition;
+}
+
+export const getFigures = (position: string[][], enemy: string) => {
+  const enemyFigures: {
+    figureName: string;
+    axisY: number;
+    axisX: number;
+  }[] = [];
+
+  position.forEach((axisY, y) => {
+    axisY.forEach((_axisX, x) => {
+      if (position[y][x].slice(0, 5) === enemy) {
+        enemyFigures.push({
+          figureName: position[y][x],
+          axisY: y,
+          axisX: x
+        })
+      }
+    })
+  })
+
+  return enemyFigures;
 }

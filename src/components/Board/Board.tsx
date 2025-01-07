@@ -5,6 +5,8 @@ import Figures from '../Figures/Figures';
 import { useChessContext } from '../../providers/context/ChessContext';
 import styles from './Board.module.scss';
 import Popup from '../popup/Popup';
+import arbiter from '../../model/arbiter/arbiter';
+import { getKingPosition } from '../../model/arbiter/getMoves';
 
 const Board = () => {
   const axisX = Array(8).fill('').map((_y, i) => i + 1);
@@ -13,6 +15,15 @@ const Board = () => {
   const { chessState } = useChessContext();
   const position = chessState.position[chessState.position.length - 1];
 
+  const isChecked = (() => {
+    const isInCheck = arbiter.isPlayerInCheck({
+      positionAfterMove: position,
+      player: chessState.turn
+    });
+    if (isInCheck) return getKingPosition(position, chessState.turn);
+    return null;
+  })();
+
   const getClassName = (i: number, j: number) => {
     let stylesCell = styles.cell;
     stylesCell += (i + j) % 2 !== 0 ? ` ${styles.white}` : ` ${styles.black}`;
@@ -20,6 +31,9 @@ const Board = () => {
       if (position[i][j]) stylesCell += ` ${styles.attaking}`;
       else stylesCell += ` ${styles.highlight}`;
     }
+
+    if (isChecked && isChecked[0] === i && isChecked[1] === j) stylesCell += ` ${styles.checked}`;
+
     return stylesCell;
   }
 

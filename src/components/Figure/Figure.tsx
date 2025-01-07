@@ -21,7 +21,7 @@ const Figure: FC<IFigureProps> = ({ axisY, axisX, figureName }) => {
       (event.target as HTMLDivElement).style.display = 'none';
     }, 0);
     if (turn === figureName.slice(0, 5)) {
-      const candidateMoves = arbiter.getRegularMoves({
+      const candidateMoves = arbiter.getValidMoves({
         figureName,
         axisY,
         axisX,
