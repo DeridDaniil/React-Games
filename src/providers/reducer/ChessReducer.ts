@@ -52,6 +52,20 @@ export const ChessReducer = (state, action) => {
         castleDirection
       }
     }
+
+    case ActionTypes.STALEMATE: {
+      return {
+        ...state,
+        status: StatusTypes.STALEMATE
+      }
+    }
+
+    case ActionTypes.NEW_GAME: {
+      return {
+        ...action.payload
+      }
+    }
+
     default:
       return state;
   }

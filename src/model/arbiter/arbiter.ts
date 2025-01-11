@@ -67,6 +67,23 @@ const arbiter = {
 
     if (enemyMoves.some(([y, x]) => kingPosition[0] === y && kingPosition[1] === x)) return true
     return false;
+  },
+
+  isStalemate: function (currentPosition: string[][], player: string, castleDirection: string) {
+    const isInCheck = this.isPlayerInCheck({ positionAfterMove: currentPosition, player });
+    if (isInCheck) return false;
+
+    const figures = getFigures(currentPosition, player);
+    const moves = figures.reduce((acc, f) => acc = [
+      ...acc,
+      ...(this.getValidMoves({
+        currentPosition,
+        castleDirection,
+        ...f
+      }))
+    ], []);
+
+    return (!isInCheck && moves.length === 0);
   }
 }
 

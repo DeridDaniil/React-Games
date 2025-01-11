@@ -9,7 +9,7 @@ import styles from './Figures.module.scss';
 import arbiter from '../../model/arbiter/arbiter';
 import { openPromotion, TOpenPromotion } from '../../providers/reducer/actions/popup';
 import { getCastlingDirections } from '../../model/arbiter/getMoves';
-import { updateCastling } from '../../providers/reducer/actions/game';
+import { detectStalemate, updateCastling } from '../../providers/reducer/actions/game';
 
 const Figures = () => {
   const figuresRef = useRef(null);
@@ -34,6 +34,8 @@ const Figures = () => {
     const { x, y } = calculateCoords(event, figuresRef);
     const [figureName, axisY, axisX] = event.dataTransfer.getData('text').split(', ');
     if (chessState.candidateMoves?.find((m: number[]) => m[0] === y && m[1] === x)) {
+      const opponent = figureName.slice(0, 5) === 'white' ? 'black' : 'white';
+      const castleDirection = chessState.castleDirection[opponent];
       if ((figureName === 'white-pawn' && y === 7) || (figureName === 'black-pawn' && y === 0)) {
         openPromotionBox({ axisY, axisX, y, x });
       }
@@ -46,6 +48,8 @@ const Figures = () => {
         y, x
       });
       dispatch(makeNewMove({ newPosition }));
+
+      if (arbiter.isStalemate(newPosition, opponent, castleDirection)) dispatch(detectStalemate());
     }
     dispatch(clearCandidates());
   }

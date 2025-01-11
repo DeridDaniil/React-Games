@@ -1,11 +1,11 @@
 import { StatusTypes } from '../../model/enums';
 import { useChessContext } from '../../providers/context/ChessContext';
 import { closePopup } from '../../providers/reducer/actions/popup';
-import PromotionBox from './PromotionBox/PromotionBox';
 
 import styles from './Popup.module.scss';
+import { Children, cloneElement, PropsWithChildren } from 'react';
 
-const Popup = () => {
+const Popup = ({ children }: PropsWithChildren) => {
   const { chessState, dispatch } = useChessContext();
 
   if (chessState.status === StatusTypes.ONGOING) return null;
@@ -15,7 +15,7 @@ const Popup = () => {
 
   return (
     <div className={styles.popup}>
-      <PromotionBox onClosePopup={onClosePopup} />
+      {Children.toArray(children).map(child => cloneElement(child, {onClosePopup}))};
     </div>
   )
 }

@@ -7,6 +7,8 @@ import styles from './Board.module.scss';
 import Popup from '../popup/Popup';
 import arbiter from '../../model/arbiter/arbiter';
 import { getKingPosition } from '../../model/arbiter/getMoves';
+import PromotionBox from '../popup/PromotionBox/PromotionBox';
+import GameEnds from '../popup/GameEnds/GameEnds';
 
 const Board = () => {
   const axisX = Array(8).fill('').map((_y, i) => i + 1);
@@ -50,7 +52,10 @@ const Board = () => {
           ))
         ))}
         <Figures />
-        <Popup />
+        <Popup>
+          <PromotionBox />
+          <GameEnds />
+        </Popup>
       </div>
       <Files files={axisX} />
     </div>
