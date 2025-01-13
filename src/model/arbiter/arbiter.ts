@@ -105,7 +105,23 @@ const arbiter = {
       )
     ) return true;
     return false;
-  }
+  },
+
+  isCheckMate: function (currentPosition: string[][], player: string, castleDirection: string) {
+    const isInCheck = this.isPlayerInCheck({ positionAfterMove: currentPosition, player });
+
+    const figures = getFigures(currentPosition, player);
+    const moves = figures.reduce((acc, f) => acc = [
+      ...acc,
+      ...(this.getValidMoves({
+        currentPosition,
+        castleDirection,
+        ...f
+      }))
+    ], []);
+
+    return (isInCheck && moves.length === 0);
+  },
 };
 
 interface IIsPlayerInCheck {

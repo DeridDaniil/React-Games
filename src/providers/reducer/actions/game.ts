@@ -26,3 +26,10 @@ export const detectInsufficientMaterial = () => {
     type: ActionTypes.INSUFFICIENT_MATERIAL,
   }
 }
+
+export const detectCheckMate = (winner: string) => {
+  return {
+    type: ActionTypes.CHECKMATE,
+    payload: winner
+  }
+}

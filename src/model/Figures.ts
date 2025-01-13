@@ -26,10 +26,6 @@ export const createPositionFigures = () => {
   position[7][6] = 'black-knight';
   position[7][7] = 'black-rook';
 
-  // position[1][7] = 'white-rook';
-  // position[5][7] = 'white-king';
-  // position[7][7] = 'black-king';
-
   return position;
 }
 

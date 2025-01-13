@@ -27,11 +27,36 @@
     background-color: transparent;
     border: 1px solid rgba(0, 0, 0, 0.85);
     color: rgba(0, 0, 0, 0.85);
-    transition: all .2s linear;
+    transition: all 0.2s linear;
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.85);
       color: white;
     }
+  }
+
+  .win {
+    height: 90px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-bottom: 15px;
+
+    &.white {
+      background-image: url("../../../assets/chess/white-king.png");
+    }
+
+    &.black {
+      background-image: url("../../../assets/chess/black-king.png");
+    }
+  }
+
+  .draws {
+    height: 90px;
+    background-size: contain;
+    background-repeat: no-repeat, no-repeat;
+    background-position: 35% center, 65% center;
+    background-image: url("../../../assets/chess/white-king.png"), url("../../../assets/chess/black-king.png");
+    margin-bottom: 15px;
   }
 }

@@ -15,12 +15,14 @@ export const ChessReducer = (state, action) => {
         position
       }
     }
+
     case ActionTypes.GENERATE_CANDIDATE_MOVES: {
       return {
         ...state,
         candidateMoves: action.payload.candidateMoves
       }
     }
+
     case ActionTypes.CLEAR_CANDIDATE_MOVES: {
       return {
         ...state,
@@ -70,6 +72,13 @@ export const ChessReducer = (state, action) => {
       return {
         ...state,
         status: StatusTypes.INSUFFICIET
+      }
+    }
+    
+    case ActionTypes.CHECKMATE: {
+      return {
+        ...state,
+        status: action.payload === 'white' ? StatusTypes.WHITE : StatusTypes.BLACK
       }
     }
 
