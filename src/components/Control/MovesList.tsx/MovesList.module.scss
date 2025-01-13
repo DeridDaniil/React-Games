@@ -1,0 +1,31 @@
+.movesList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex: 1 1;
+  align-content: start;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  padding: 15px;
+  overflow: auto;
+  color: #ebecd0;
+  font-size: 1.1em;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(10px);
+  width: 250px;
+
+  div {
+    position: relative;
+    flex-basis: 35%;
+    padding-bottom: 5px;
+    padding-left: 15%;
+    text-align: left;
+
+    &[data-number]:nth-child(odd)::before {
+      content: attr(data-number);
+      position: absolute;
+      left: 0;
+      opacity: 0.5;
+    }
+  }
+}

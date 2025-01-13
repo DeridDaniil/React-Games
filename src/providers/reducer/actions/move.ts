@@ -2,12 +2,13 @@ import { ActionTypes } from "../../../model/enums"
 
 type TMakeNewMove = {
   newPosition: string[][];
+  newMove: string;
 }
 
-export const makeNewMove = ({ newPosition }: TMakeNewMove) => {
+export const makeNewMove = ({ newPosition, newMove }: TMakeNewMove) => {
   return {
     type: ActionTypes.NEW_MOVE,
-    payload: { newPosition }
+    payload: { newPosition, newMove }
   }
 }
 
@@ -25,5 +26,11 @@ export const generateCandidateMoves = ({ candidateMoves }: TGenerateCandidateMov
 export const clearCandidates = () => {
   return {
     type: ActionTypes.CLEAR_CANDIDATE_MOVES
+  }
+}
+
+export const takeBack = () => {
+  return {
+    type: ActionTypes.TAKE_BACK
   }
 }

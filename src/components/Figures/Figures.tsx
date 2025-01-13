@@ -1,6 +1,6 @@
 import { DragEvent, useRef } from 'react';
 
-import { calculateCoords } from '../../model/Figures';
+import { calculateCoords, getNewMoveNotation } from '../../model/Figures';
 import { useChessContext } from '../../providers/context/ChessContext';
 import { clearCandidates, makeNewMove } from '../../providers/reducer/actions/move';
 import Figure from '../Figure/Figure';
@@ -47,7 +47,10 @@ const Figures = () => {
         figureName, axisY, axisX,
         y, x
       });
-      dispatch(makeNewMove({ newPosition }));
+
+      const newMove = getNewMoveNotation({ figureName, axisY, axisX, y, x, currentPosition });
+
+      dispatch(makeNewMove({ newPosition, newMove }));
 
       if (arbiter.insufficientMaterial(newPosition)) dispatch(detectInsufficientMaterial());
       if (arbiter.isStalemate(newPosition, opponent, castleDirection)) dispatch(detectStalemate());

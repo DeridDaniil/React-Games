@@ -10,5 +10,6 @@ export const initChessGame = {
   castleDirection: {
     white: 'both',
     black: 'both'
-  }
+  },
+  movesList: [] 
 }

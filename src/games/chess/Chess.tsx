@@ -4,6 +4,9 @@ import { initChessGame } from '../../model/constant';
 
 import ChessContext from '../../providers/context/ChessContext';
 import Board from '../../components/Board/Board';
+import Control from '../../components/Control/Control';
+import MovesList from '../../components/Control/MovesList.tsx/MovesList';
+import TakeBack from '../../components/Control/TakeBack/TakeBack';
 
 import styles from './Chess.module.scss';
 
@@ -18,6 +21,10 @@ const Chess = () => {
     <ChessContext.Provider value={chessProviderState}>
       <div className={styles.chess}>
         <Board />
+        <Control>
+          <MovesList />
+          <TakeBack />
+        </Control>
       </div>
     </ChessContext.Provider>
   )

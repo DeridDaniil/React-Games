@@ -1,7 +1,6 @@
 .board {
   display: grid;
   grid-template-columns: 1fr calc(8 * 90px);
-  gap: 15px;
 
   .cells {
     position: relative;

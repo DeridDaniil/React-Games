@@ -1,9 +1,10 @@
+import { getNewMoveNotation } from '../../../model/Figures';
 import { useChessContext } from '../../../providers/context/ChessContext';
 import { clearCandidates, makeNewMove } from '../../../providers/reducer/actions/move';
 import './PromotionBox.scss';
 
 type TPromotionBox = {
-  onClosePopup: () => void; 
+  onClosePopup: () => void;
 }
 
 const PromotionBox = ({ onClosePopup }: TPromotionBox) => {
@@ -35,7 +36,15 @@ const PromotionBox = ({ onClosePopup }: TPromotionBox) => {
     newPosition[promotionSquare.y][promotionSquare.x] = color + '-' + option;
 
     dispatch(clearCandidates());
-    dispatch(makeNewMove({ newPosition }));
+
+    const newMove = getNewMoveNotation({
+      ...promotionSquare,
+      figureName: color + 'pawn',
+      promotesTo: option,
+      currentPosition: chessState.position[chessState.position.length - 1]
+    });
+
+    dispatch(makeNewMove({ newPosition, newMove }));
   }
 
   return (

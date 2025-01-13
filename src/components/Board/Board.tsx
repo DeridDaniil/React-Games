@@ -3,12 +3,12 @@ import Files from '../Bits/Files/Files';
 import Figures from '../Figures/Figures';
 
 import { useChessContext } from '../../providers/context/ChessContext';
-import styles from './Board.module.scss';
 import Popup from '../popup/Popup';
 import arbiter from '../../model/arbiter/arbiter';
 import { getKingPosition } from '../../model/arbiter/getMoves';
 import PromotionBox from '../popup/PromotionBox/PromotionBox';
 import GameEnds from '../popup/GameEnds/GameEnds';
+import styles from './Board.module.scss';
 
 const Board = () => {
   const axisX = Array(8).fill('').map((_y, i) => i + 1);

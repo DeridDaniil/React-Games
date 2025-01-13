@@ -51,3 +51,40 @@ export const findFiguresCoords = (position, type) => {
   });
   return results;
 };
+
+export const getCharacter = (axisX: number) => String.fromCharCode(axisX + 96);
+
+interface IGetNewMoveNotation {
+  figureName: string;
+  axisY: number;
+  axisX: number;
+  y: number;
+  x: number;
+  currentPosition: string[][];
+  promotesTo?: string;
+}
+
+export const getNewMoveNotation = ({ figureName, axisY, axisX, y, x, currentPosition, promotesTo }: IGetNewMoveNotation) => {
+  let note = '';
+  const figure = figureName.slice(6);
+
+  axisY = Number(axisY);
+  axisX = Number(axisX);
+
+  if (figure === 'king' && Math.abs(axisX - x) === 2) {
+    if (axisX > x) return '0-0'
+    else return '0-0-0'
+  };
+
+  if (figure !== 'pawn') {
+    if (figure === 'knight') note += figureName.slice(7, 8).toUpperCase();
+    else note += figureName.slice(6, 7).toUpperCase();
+    if (currentPosition[y][x]) note += 'x'
+  } else if (axisY !== y && axisX !== x) note += getCharacter(axisX + 1) + 'y';
+
+  note += getCharacter(x + 1) + (y + 1);
+
+  if (promotesTo) note += '=' + promotesTo.slice(0, 1).toUpperCase();
+
+  return note;
+}

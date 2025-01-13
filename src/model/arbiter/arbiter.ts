@@ -87,7 +87,7 @@ const arbiter = {
     return (!isInCheck && moves.length === 0);
   },
 
-  insufficientMaterial: function (currentPosition) {
+  insufficientMaterial: function (currentPosition: string[][]) {
     const figures = currentPosition.reduce((acc, axisY) =>
       acc = [
         ...acc,
