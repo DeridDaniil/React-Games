@@ -1,3 +1,4 @@
+import { areSomeColorTiles, findFiguresCoords } from "../Figures";
 import { getRookMoves, getKnightMoves, IRegularMoves, getBishopMoves, getQueenMoves, getKingMoves, getPawnMoves, IValidMoves, getKingPosition, getFigures, getCastlingMoves, getEnPassantMoves } from "./getMoves"
 import { movePawn, moveFigure, TPerformMove } from "./move";
 
@@ -84,8 +85,28 @@ const arbiter = {
     ], []);
 
     return (!isInCheck && moves.length === 0);
+  },
+
+  insufficientMaterial: function (currentPosition) {
+    const figures = currentPosition.reduce((acc, axisY) =>
+      acc = [
+        ...acc,
+        ...axisY.filter(y => y)
+      ], []);
+
+    if (figures.length === 2) return true;
+    if (figures.length === 3 && (figures.some(f => f.slice(6) === 'bishop' || f.slice(6) === 'knight'))) return true;
+    if (figures.length === 4 &&
+      figures.every(f => f.slice(6) === 'bishop' || f.slice(6) === 'king') &&
+      new Set(figures).size === 4 &&
+      areSomeColorTiles(
+        findFiguresCoords(currentPosition, 'white-bishop')[0],
+        findFiguresCoords(currentPosition, 'black-bishop')[0],
+      )
+    ) return true;
+    return false;
   }
-}
+};
 
 interface IIsPlayerInCheck {
   positionAfterMove: string[][];

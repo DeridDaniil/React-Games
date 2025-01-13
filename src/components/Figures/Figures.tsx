@@ -9,7 +9,7 @@ import styles from './Figures.module.scss';
 import arbiter from '../../model/arbiter/arbiter';
 import { openPromotion, TOpenPromotion } from '../../providers/reducer/actions/popup';
 import { getCastlingDirections } from '../../model/arbiter/getMoves';
-import { detectStalemate, updateCastling } from '../../providers/reducer/actions/game';
+import { detectInsufficientMaterial, detectStalemate, updateCastling } from '../../providers/reducer/actions/game';
 
 const Figures = () => {
   const figuresRef = useRef(null);
@@ -49,6 +49,7 @@ const Figures = () => {
       });
       dispatch(makeNewMove({ newPosition }));
 
+      if (arbiter.insufficientMaterial(newPosition)) dispatch(detectInsufficientMaterial());
       if (arbiter.isStalemate(newPosition, opponent, castleDirection)) dispatch(detectStalemate());
     }
     dispatch(clearCandidates());

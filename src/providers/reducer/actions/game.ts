@@ -20,3 +20,9 @@ export const setupNewGame = () => {
     payload: initChessGame
   }
 }
+
+export const detectInsufficientMaterial = () => {
+  return {
+    type: ActionTypes.INSUFFICIENT_MATERIAL,
+  }
+}

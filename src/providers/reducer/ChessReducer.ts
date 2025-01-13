@@ -66,6 +66,13 @@ export const ChessReducer = (state, action) => {
       }
     }
 
+    case ActionTypes.INSUFFICIENT_MATERIAL: {
+      return {
+        ...state,
+        status: StatusTypes.INSUFFICIET
+      }
+    }
+
     default:
       return state;
   }

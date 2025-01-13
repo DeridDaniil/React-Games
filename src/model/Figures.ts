@@ -26,8 +26,8 @@ export const createPositionFigures = () => {
   position[7][6] = 'black-knight';
   position[7][7] = 'black-rook';
 
-  // position[6][0] = 'white-rook';
-  // position[7][5] = 'white-king';
+  // position[1][7] = 'white-rook';
+  // position[5][7] = 'white-king';
   // position[7][7] = 'black-king';
 
   return position;
@@ -41,3 +41,17 @@ export const calculateCoords = (event: DragEvent<HTMLDivElement>, figuresRef: Mu
   const y = 7 - Math.floor(Math.floor(event.clientY - top) / size);
   return { x, y };
 }
+
+export const areSomeColorTiles = (coords1, coords2) => {
+  (coords1.y + coords1.x) % 2 === (coords2.y + coords2.x) % 2;
+}
+
+export const findFiguresCoords = (position, type) => {
+  let results = [];
+  position.forEach((axisY, y) => {
+    axisY.forEach((axisX, x) => {
+      if (axisX === type) results.push({ y: y, x: x });
+    });
+  });
+  return results;
+};
